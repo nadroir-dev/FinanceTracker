@@ -1,28 +1,18 @@
-// This imports the LocalDate class, which lets us work with dates (like "2025-10-20")
 import java.time.LocalDate;
 
 /**
  * Represents a single financial expense.
- * This is a "model" or "blueprint" class. It doesn't *do* much
- * by itself, but it holds all the important data for one expense.
+ * This class holds all the important data for one expense.
  */
 public class Expense {
 
-    // --- 1. Fields (The Data) ---
-    // These are the variables that every Expense object will have.
-    // We make them 'private' so they can only be changed by methods
-    // inside this class (which is good practice!).
+    // --- 1. Fields ---
     private String description;
     private double amount;
     private String category;
     private LocalDate date;
 
-    // --- 2. Constructor (The "Builder") ---
-    /**
-     * This is a special method called a constructor.
-     * Its job is to create a new Expense object and set all its
-     * initial values (its fields).
-     */
+    // --- 2. Constructor ---
     public Expense(String description, double amount, String category, LocalDate date) {
         this.description = description;
         this.amount = amount;
@@ -30,11 +20,7 @@ public class Expense {
         this.date = date;
     }
 
-    // --- 3. "Getter" Methods (The "Accessors") ---
-    // Since our fields are 'private', we need public methods
-    // to allow other parts of our code to *read* the data.
-    // These are called "getters".
-
+    // --- 3. "Getter" Methods ---
     public String getDescription() {
         return this.description;
     }
@@ -51,11 +37,7 @@ public class Expense {
         return this.date;
     }
 
-    // --- 4. "Setter" Methods (The "Mutators") ---
-    // We might also want to *change* data after an object is created.
-    // (For example, to fix a typo in the description).
-    // These are called "setters".
-
+    // --- 4. "Setter" Methods ---
     public void setDescription(String description) {
         this.description = description;
     }
@@ -64,20 +46,42 @@ public class Expense {
         this.category = category;
     }
 
-    // Note: We probably don't want setters for 'amount' or 'date'
-    // to prevent accidental changes. If you want to change an amount,
-    // you'd probably just delete the expense and add a new one.
-
     // --- 5. A Helper Method (toString) ---
-    /**
-     * This is a special built-in Java method. We are "overriding" it
-     * to provide a clean, human-readable String representation
-     * of an Expense object. This is great for debugging and for
-     * printing a list of expenses to the console.
-     */
     @Override
     public String toString() {
-        // Example output: "2025-10-20: Groceries - $75.50 (Weekly shopping)"
         return this.date + ": " + this.category + " - $" + this.amount + " (" + this.description + ")";
+    }
+
+    // --- 6. NEW: Data Persistence Methods ---
+
+    /**
+     * Converts the Expense object into a simple string for saving to a file.
+     * We use a pipe '|' delimiter to avoid problems with commas.
+     *
+     * @return A pipe-delimited string of the expense data.
+     */
+    public String toDataString() {
+        // Format: description|amount|category|date
+        return this.description + "|" + this.amount + "|" + this.category + "|" + this.date;
+    }
+
+    /**
+     * A "static factory method" that creates a new Expense object
+     * from a data string.
+     *
+     * @param dataString The string read from the file.
+     * @return A new Expense object.
+     */
+    public static Expense fromDataString(String dataString) {
+        // The regex "\\|" is used to split on the pipe character.
+        String[] parts = dataString.split("\\|");
+
+        // We parse each part back into its original data type
+        String description = parts[0];
+        double amount = Double.parseDouble(parts[1]);
+        String category = parts[2];
+        LocalDate date = LocalDate.parse(parts[3]); // LocalDate knows how to parse "2025-10-20"
+
+        return new Expense(description, amount, category, date);
     }
 }
