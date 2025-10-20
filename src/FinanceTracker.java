@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.time.LocalDate; // We will need this for the next step!
+import java.time.LocalDate; // We will use this in our new method!
 
 /**
  * This is the main class for our FinanceTracker application.
@@ -64,41 +64,59 @@ public class FinanceTracker {
     private static void setBudget() {
         System.out.println("--- Set Budget ---");
 
-        // 1. Ask for the category name
         System.out.print("Enter category name (e.g., Groceries): ");
         String category = scanner.nextLine();
 
-        // 2. Ask for the budget limit
         System.out.print("Enter budget limit for " + category + ": $");
         double limit = scanner.nextDouble();
-        scanner.nextLine(); // Consume the 'Enter' key after the number
+        scanner.nextLine(); // Consume the 'Enter' key
 
-        // 3. Save the data to our 'budget' object
-        // We are calling the setBudgetCategory() method
-        // from our Budget.java class.
         budget.setBudgetCategory(category, limit);
 
-        // 4. Print a success message
         System.out.println("Budget set! " + category + " = $" + limit);
     }
 
     /**
-     * Placeholder method for adding an expense.
-     * We will build this next.
+     * Asks the user for expense details, creates an
+     * Expense object, and adds it to our 'expenses' list.
      */
     private static void addExpense() {
         System.out.println("--- Add Expense ---");
-        // TODO: We will write this code next
-        System.out.println("[Feature coming soon!]");
+
+        // 1. Get expense description
+        System.out.print("Enter expense description (e.g., Weekly shopping): ");
+        String description = scanner.nextLine();
+
+        // 2. Get expense amount
+        System.out.print("Enter expense amount: $");
+        double amount = scanner.nextDouble();
+        scanner.nextLine(); // Consume the 'Enter' key
+
+        // 3. Get expense category
+        System.out.print("Enter expense category (e.g., Groceries): ");
+        String category = scanner.nextLine();
+
+        // 4. Get today's date automatically
+        LocalDate date = LocalDate.now();
+
+        // 5. Create a new Expense object using our blueprint
+        Expense newExpense = new Expense(description, amount, category, date);
+
+        // 6. Add the new object to our ArrayList
+        expenses.add(newExpense);
+
+        // 7. Print a success message
+        System.out.println("Expense added!");
+        System.out.println(newExpense); // This uses the .toString() method we wrote!
     }
 
     /**
      * Placeholder method for viewing the summary.
-     * We will build this later.
+     * We will build this next.
      */
     private static void viewSummary() {
         System.out.println("--- View Summary ---");
-        // TODO: We will write this code later
+        // TODO: We will write this code next
         System.out.println("[Feature coming soon!]");
     }
 }
