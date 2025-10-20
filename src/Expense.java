@@ -45,6 +45,12 @@ public class Expense {
     public void setCategory(String category) {
         this.category = category;
     }
+    /**
+     * NEW: method to allow editing an amount.
+     */
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
 
     // --- 5. A Helper Method (toString) ---
     @Override
