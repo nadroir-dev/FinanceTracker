@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.time.LocalDate; // We will use this in our new method!
+import java.time.LocalDate;
+import java.util.HashMap; // We need this for our summary calculation
+import java.util.Map;   // We need this to loop through HashMaps
 
 /**
  * This is the main class for our FinanceTracker application.
@@ -21,6 +23,7 @@ public class FinanceTracker {
         while (true) {
             displayMenu();
 
+            // We'll add error handling here in a future version!
             int choice = scanner.nextInt();
             scanner.nextLine(); // Consume the 'Enter' key
 
@@ -83,40 +86,80 @@ public class FinanceTracker {
     private static void addExpense() {
         System.out.println("--- Add Expense ---");
 
-        // 1. Get expense description
         System.out.print("Enter expense description (e.g., Weekly shopping): ");
         String description = scanner.nextLine();
 
-        // 2. Get expense amount
         System.out.print("Enter expense amount: $");
         double amount = scanner.nextDouble();
         scanner.nextLine(); // Consume the 'Enter' key
 
-        // 3. Get expense category
         System.out.print("Enter expense category (e.g., Groceries): ");
         String category = scanner.nextLine();
 
-        // 4. Get today's date automatically
         LocalDate date = LocalDate.now();
-
-        // 5. Create a new Expense object using our blueprint
         Expense newExpense = new Expense(description, amount, category, date);
-
-        // 6. Add the new object to our ArrayList
         expenses.add(newExpense);
 
-        // 7. Print a success message
         System.out.println("Expense added!");
-        System.out.println(newExpense); // This uses the .toString() method we wrote!
+        System.out.println(newExpense);
     }
 
     /**
-     * Placeholder method for viewing the summary.
-     * We will build this next.
+     * Calculates and displays a summary of spending vs. budget.
      */
     private static void viewSummary() {
-        System.out.println("--- View Summary ---");
-        // TODO: We will write this code next
-        System.out.println("[Feature coming soon!]");
+        System.out.println("\n--- Your Monthly Summary ---");
+
+        // 1. Calculate total spending per category
+        // We create a temporary HashMap to hold the totals.
+        HashMap<String, Double> spendingTotals = new HashMap<>();
+
+        // Loop through every single expense in our 'expenses' ArrayList
+        for (Expense expense : expenses) {
+            String category = expense.getCategory();
+            double amount = expense.getAmount();
+
+            // Get the current total for this category (or 0.0 if it's not in the map yet)
+            double currentTotal = spendingTotals.getOrDefault(category, 0.0);
+
+            // Add the new expense amount and put it back in the map
+            spendingTotals.put(category, currentTotal + amount);
+        }
+
+        // 2. Display the report by looping through the budget
+        HashMap<String, Double> budgetCategories = budget.getAllCategories();
+
+        if (budgetCategories.isEmpty()) {
+            System.out.println("You haven't set any budget categories yet!");
+        }
+
+        // This loops through every Key/Value pair in our budget
+        for (Map.Entry<String, Double> entry : budgetCategories.entrySet()) {
+            String category = entry.getKey();
+            double limit = entry.getValue();
+
+            // Get the total spent, defaulting to 0.0 if no expenses were added
+            double spent = spendingTotals.getOrDefault(category, 0.0);
+            double remaining = limit - spent;
+
+            // Use printf for clean, formatted columns
+            System.out.printf("Category: %-15s | Budget: $%-10.2f | Spent: $%-10.2f | Remaining: $%-10.2f\n",
+                    category, limit, spent, remaining);
+
+            // We've processed this category, so remove it from the spendingTotals map
+            // This way, only *unbudgeted* spending will be left in the map.
+            spendingTotals.remove(category);
+        }
+
+        // 3. Display any unbudgeted spending
+        if (!spendingTotals.isEmpty()) {
+            System.out.println("\n--- Unbudgeted Spending ---");
+            for (Map.Entry<String, Double> entry : spendingTotals.entrySet()) {
+                String category = entry.getKey();
+                double spent = entry.getValue();
+                System.out.printf("Category: %-15s | Spent: $%.2f\n", category, spent);
+            }
+        }
+        System.out.println("---------------------------------");
     }
 }
