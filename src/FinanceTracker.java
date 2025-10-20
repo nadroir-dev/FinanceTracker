@@ -100,9 +100,18 @@ public class FinanceTracker {
         System.out.println(newExpense);
     }
 
+    /**
+     * Calculates and displays a summary of spending vs. budget.
+     * NOW ALSO displays a list of all recorded expenses.
+     */
+    /**
+     * Calculates and displays a summary of spending vs. budget.
+     * NOW ALSO displays a list of all recorded expenses.
+     */
     private static void viewSummary() {
         System.out.println("\n--- Your Monthly Summary ---");
 
+        // 1. Calculate total spending per category
         HashMap<String, Double> spendingTotals = new HashMap<>();
         for (Expense expense : expenses) {
             String category = expense.getCategory();
@@ -111,7 +120,9 @@ public class FinanceTracker {
             spendingTotals.put(category, currentTotal + amount);
         }
 
+        // 2. Display the budget report
         HashMap<String, Double> budgetCategories = budget.getAllCategories();
+
         if (budgetCategories.isEmpty()) {
             System.out.println("You haven't set any budget categories yet!");
         }
@@ -121,11 +132,13 @@ public class FinanceTracker {
             double limit = entry.getValue();
             double spent = spendingTotals.getOrDefault(category, 0.0);
             double remaining = limit - spent;
+
             System.out.printf("Category: %-15s | Budget: $%-10.2f | Spent: $%-10.2f | Remaining: $%-10.2f\n",
                     category, limit, spent, remaining);
             spendingTotals.remove(category);
         }
 
+        // 3. Display unbudgeted spending
         if (!spendingTotals.isEmpty()) {
             System.out.println("\n--- Unbudgeted Spending ---");
             for (Map.Entry<String, Double> entry : spendingTotals.entrySet()) {
@@ -134,6 +147,20 @@ public class FinanceTracker {
                 System.out.printf("Category: %-15s | Spent: $%.2f\n", category, spent);
             }
         }
+
+        // 4. --- NEW FEATURE ---
+        //    Display all individual expenses
+        System.out.println("\n--- All Recorded Expenses ---");
+        if (expenses.isEmpty()) {
+            System.out.println("You have not recorded any expenses yet.");
+        } else {
+            // We just loop through the list and use the
+            // toString() method from our Expense class!
+            for (Expense expense : expenses) {
+                System.out.println(expense);
+            }
+        }
+
         System.out.println("---------------------------------");
     }
 

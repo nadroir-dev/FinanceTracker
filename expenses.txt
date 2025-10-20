@@ -1,0 +1,2 @@
+Milk and Eggs|25.0|Groceries|2025-10-20
+Gas Fill Up|32.99|Gas|2025-10-20
