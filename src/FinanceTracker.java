@@ -1,7 +1,6 @@
-// Import the classes we need
-import java.util.ArrayList; // To store our list of expenses
-import java.util.Scanner;   // To read user input from the console
-import java.time.LocalDate; // We'll need this soon for adding expenses
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.time.LocalDate; // We will need this for the next step!
 
 /**
  * This is the main class for our FinanceTracker application.
@@ -10,11 +9,6 @@ import java.time.LocalDate; // We'll need this soon for adding expenses
 public class FinanceTracker {
 
     // --- 1. Fields ---
-    // We create our objects here so they can be used
-    // by all the methods inside this class.
-
-    // 'private static' means these variables belong to the class itself
-    // and can be accessed from our 'static main' method.
     private static Scanner scanner = new Scanner(System.in);
     private static Budget budget = new Budget();
     private static ArrayList<Expense> expenses = new ArrayList<>();
@@ -24,18 +18,12 @@ public class FinanceTracker {
 
         System.out.println("Welcome to your personal Finance Tracker!");
 
-        // This 'while(true)' loop will run forever, keeping our
-        // application alive until the user chooses to exit.
         while (true) {
-            displayMenu(); // Call our helper method to show the menu
+            displayMenu();
 
-            // Get the user's choice
             int choice = scanner.nextInt();
-            scanner.nextLine(); // This is a small trick to "consume" the 'Enter' key
-            // after the user types a number. It prevents bugs.
+            scanner.nextLine(); // Consume the 'Enter' key
 
-            // This 'switch' statement is a clean way to handle
-            // the different menu choices.
             switch (choice) {
                 case 1:
                     setBudget();
@@ -47,10 +35,8 @@ public class FinanceTracker {
                     viewSummary();
                     break;
                 case 4:
-                    // We'll add saving to a file here later (in Phase 4)
                     System.out.println("Exiting. Goodbye!");
-                    return; // This 'return' statement breaks out of the 'while(true)'
-                // loop and ends the main method, closing the app.
+                    return;
                 default:
                     System.out.println("Invalid choice. Please enter a number between 1 and 4.");
             }
@@ -72,32 +58,47 @@ public class FinanceTracker {
     }
 
     /**
-     * Placeholder method for setting the budget.
-     * We will build this in Phase 3.
+     * Asks the user for a category and a limit, then
+     * saves it to the 'budget' object.
      */
     private static void setBudget() {
         System.out.println("--- Set Budget ---");
-        // TODO: We will write this code in Phase 3
-        System.out.println("[Feature coming soon!]");
+
+        // 1. Ask for the category name
+        System.out.print("Enter category name (e.g., Groceries): ");
+        String category = scanner.nextLine();
+
+        // 2. Ask for the budget limit
+        System.out.print("Enter budget limit for " + category + ": $");
+        double limit = scanner.nextDouble();
+        scanner.nextLine(); // Consume the 'Enter' key after the number
+
+        // 3. Save the data to our 'budget' object
+        // We are calling the setBudgetCategory() method
+        // from our Budget.java class.
+        budget.setBudgetCategory(category, limit);
+
+        // 4. Print a success message
+        System.out.println("Budget set! " + category + " = $" + limit);
     }
 
     /**
      * Placeholder method for adding an expense.
-     * We will build this in Phase 3.
+     * We will build this next.
      */
     private static void addExpense() {
         System.out.println("--- Add Expense ---");
-        // TODO: We will write this code in Phase 3
+        // TODO: We will write this code next
         System.out.println("[Feature coming soon!]");
     }
 
     /**
      * Placeholder method for viewing the summary.
-     * We will build this in Phase 3.
+     * We will build this later.
      */
     private static void viewSummary() {
         System.out.println("--- View Summary ---");
-        // TODO: We will write this code in Phase 3
+        // TODO: We will write this code later
         System.out.println("[Feature coming soon!]");
     }
 }
