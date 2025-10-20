@@ -1,57 +1,103 @@
-// These are the new imports for JavaFX
 import javafx.application.Application;
+import javafx.geometry.Insets; // Used for adding padding
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox; // A simple layout container
+import javafx.scene.control.*; // Imports all controls (Button, Label, TextField, etc.)
+import javafx.scene.layout.GridPane; // A layout for forms
+import javafx.scene.layout.VBox; // Vertical layout
 import javafx.stage.Stage;
 
-/**
- * This is our new main class for the GUI application.
- * Notice it "extends Application"
- */
 public class FinanceTrackerGui extends Application {
 
-    // --- 1. The 'start' Method ---
-    /**
-     * This is the new "entry point" for our JavaFX app.
-     * The 'main' method (below) just calls this.
-     * The 'Stage' is the main application window.
-     */
+    // --- 1. Define all our UI components ---
+    // We make these "fields" (variables) for the whole class
+    // so our helper methods can access them later.
+
+    // "Add Expense" section
+    private TextField descriptionInput;
+    private TextField amountInput;
+    private TextField expenseCategoryInput;
+    private Button addExpenseButton;
+
+    // "Set Budget" section
+    private TextField budgetCategoryInput;
+    private TextField budgetLimitInput;
+    private Button setBudgetButton;
+
+    // "Summary" section
+    private TextArea summaryArea;
+
     @Override
     public void start(Stage primaryStage) {
 
-        // --- 2. Create UI Controls ---
-        // A 'Label' is just simple text.
-        Label greetingLabel = new Label("Welcome to our Finance Tracker GUI!");
-        Label nextStepsLabel = new Label("Next, we will add buttons and text fields here.");
+        // --- 2. Initialize all components ---
 
-        // --- 3. Create a Layout ---
-        // A 'VBox' is a "Vertical Box". It stacks things on top of each other.
-        VBox rootLayout = new VBox();
-        rootLayout.setSpacing(10); // Add 10 pixels of space between items
+        // "Add Expense"
+        descriptionInput = new TextField();
+        descriptionInput.setPromptText("e.g., Weekly shopping"); // Placeholder text
+        amountInput = new TextField();
+        amountInput.setPromptText("e.g., 75.50");
+        expenseCategoryInput = new TextField();
+        expenseCategoryInput.setPromptText("e.g., Groceries");
+        addExpenseButton = new Button("Add Expense");
 
-        // Add our labels to the layout
-        rootLayout.getChildren().add(greetingLabel);
-        rootLayout.getChildren().add(nextStepsLabel);
+        // "Set Budget"
+        budgetCategoryInput = new TextField();
+        budgetCategoryInput.setPromptText("e.g., Groceries");
+        budgetLimitInput = new TextField();
+        budgetLimitInput.setPromptText("e.g., 500.00");
+        setBudgetButton = new Button("Set Budget");
 
-        // --- 4. Create a Scene ---
-        // The 'Scene' is the content inside the window.
-        // We put our layout into the scene.
-        // We also set the size of the window (400 pixels wide, 300 tall).
-        Scene scene = new Scene(rootLayout, 400, 300);
+        // "Summary"
+        summaryArea = new TextArea();
+        summaryArea.setEditable(false); // Make it read-only
+        summaryArea.setText("Welcome! Your summary will appear here.");
 
-        // --- 5. Show the Stage ---
-        primaryStage.setTitle("Finance Tracker v2.0"); // Set the window title
-        primaryStage.setScene(scene); // Put the scene in the window
-        primaryStage.show(); // Open the window!
+        // --- 3. Create the Layout ---
+
+        // Use a GridPane for our forms. It's like a mini-spreadsheet.
+        GridPane formGrid = new GridPane();
+        formGrid.setPadding(new Insets(10)); // Add 10px padding around the grid
+        formGrid.setHgap(10); // Horizontal space between columns
+        formGrid.setVgap(10); // Vertical space between rows
+
+        // --- "Add Expense" Form (Row 0-1) ---
+        formGrid.add(new Label("--- Add Expense ---"), 0, 0, 2, 1); // Span 2 columns
+
+        formGrid.add(new Label("Description:"), 0, 1);
+        formGrid.add(descriptionInput, 1, 1);
+
+        formGrid.add(new Label("Amount:"), 0, 2);
+        formGrid.add(amountInput, 1, 2);
+
+        formGrid.add(new Label("Category:"), 0, 3);
+        formGrid.add(expenseCategoryInput, 1, 3);
+
+        formGrid.add(addExpenseButton, 1, 4); // Add the button
+
+        // --- "Set Budget" Form (Row 5-6) ---
+        formGrid.add(new Label("--- Set Budget ---"), 0, 5, 2, 1); // Span 2 columns
+
+        formGrid.add(new Label("Category:"), 0, 6);
+        formGrid.add(budgetCategoryInput, 1, 6);
+
+        formGrid.add(new Label("Limit:"), 0, 7);
+        formGrid.add(budgetLimitInput, 1, 7);
+
+        formGrid.add(setBudgetButton, 1, 8); // Add the button
+
+        // --- 4. Create the Root Layout ---
+        // We'll stack the form grid on top of the summary area.
+        VBox rootLayout = new VBox(10); // 10px spacing
+        rootLayout.setPadding(new Insets(10));
+        rootLayout.getChildren().addAll(formGrid, new Label("--- Summary ---"), summaryArea);
+
+        // --- 5. Create the Scene and Show the Stage ---
+        Scene scene = new Scene(rootLayout, 500, 600); // Width 500, Height 600
+        primaryStage.setTitle("Finance Tracker v2.0");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
-    // --- 6. The 'main' Method ---
-    /**
-     * This main method is still the entry point for Java itself.
-     * Its only job is to "launch" the JavaFX application,
-     * which then calls our 'start' method.
-     */
     public static void main(String[] args) {
         launch(args);
     }
