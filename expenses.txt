@@ -1,1 +1,2 @@
-Milk and Eggs|30.0|Groceries|2025-10-20
+Milk and Eggs|32.0|Groceries|2025-10-20
+Laser|3500.0|Beauty|2025-10-20

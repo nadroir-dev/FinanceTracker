@@ -1,2 +1,3 @@
+Beauty|1000.0
 Groceries|400.0
 Gas|120.0
